@@ -3,8 +3,6 @@ import java.util.*;
 
 class Hw03{
 
-    //UCFxram function outputs 32 bit int hash value of string input
-    //output hashvalue = hexvalue of string
     public static int xram(String input, int length){
         int rand1 = 0xbcde98ef;
         int rand2 = 0x7890face;
@@ -20,30 +18,28 @@ class Hw03{
         for(int i=0; i<roundedEnd; i+=4){
             tmpData = (data[i] & 0xff)|((data[i+ 1] & 0xff)<<8)|((data[i+ 2] & 0xff)<<16)|(data[i+ 3]<<24);
             tmpData *= rand1;
-            Integer.rotateLeft(tmpData,12);
+            tmpData = Integer.rotateLeft(tmpData,12);
             tmpData *= rand2;
             hashValue = hashValue ^ tmpData;
-            Integer.rotateLeft(hashValue,13);
+            hashValue = Integer.rotateLeft(hashValue,13);
             hashValue = (hashValue * 5) + 0x46b6456e;
         }
         tmpData = 0;
 
         if((length & 0x03) == 3){
-            System.out.println("test3");
             tmpData = (data[roundedEnd + 2] & 0xff) << 16;
             length -= 1;
         }
         if((length & 0x03) == 2){
-            System.out.println("test2");
+            
             tmpData |= (data[roundedEnd + 1] & 0xff) << 8;
             length -= 1;
         }
         if((length & 0x03) == 1){
-            System.out.println("test1");
-            tmpData |= (data[roundedEnd] & 0xff);
-            tmpData *= rand1;
-            Integer.rotateLeft(tmpData,14);
-            tmpData *= rand2;
+            tmpData = tmpData | (data[roundedEnd] & 0xff);
+            tmpData = tmpData * rand1;
+            tmpData = Integer.rotateLeft(tmpData,14);
+            tmpData = tmpData * rand2;
             hashValue = hashValue ^ tmpData;
         }
 
@@ -59,7 +55,7 @@ class Hw03{
     }
 
     public static void complexityIndicator(){
-        System.err.println("al144291;0;0");
+        System.err.println("al144291;4;4");
     }
     
     public static void main(String[] args) throws Exception
